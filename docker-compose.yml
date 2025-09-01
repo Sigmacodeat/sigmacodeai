@@ -1,0 +1,150 @@
+name: sigmacode-ai
+
+services:
+  api:
+    container_name: sigmacode-ai-api
+    build:
+      context: ./sigmacode_ai
+      dockerfile: Dockerfile
+    image: sigmacode-ai/api:latest
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=3080
+      - HOST=0.0.0.0
+      - APP_NAME=${APP_NAME}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS}
+      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX}
+      - JWT_SECRET=${JWT_SECRET:-secret}
+      - SESSION_SECRET=${SESSION_SECRET:-secret}
+      - DOMAIN_SERVER=${DOMAIN_SERVER}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+      - VITE_API_TARGET=${VITE_API_TARGET}
+      - MONGO_URI=mongodb://mongodb:27017/sigmacode-ai
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      - MEILI_HOST=${MEILI_HOST:-http://meilisearch:7700}
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+      - MEILI_INDEX=${MEILI_INDEX:-sigmacode}
+      - NODE_OPTIONS=${NODE_OPTIONS}
+      - TZ=${TZ}
+      - CONFIG_PATH=/app/sigmacode-ai.yaml
+      - RAG_API_URL=http://rag-stub
+      # Optionales IMAP / 3rd-party
+      - IMAP_HOST=${IMAP_HOST}
+      - IMAP_PORT=${IMAP_PORT}
+      - IMAP_USER=${IMAP_USER}
+      - IMAP_PASS=${IMAP_PASS}
+      - IMAP_TLS=${IMAP_TLS}
+      # Social Logins aktivieren
+      - ALLOW_SOCIAL_LOGIN=true
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      # Provider Keys (falls gesetzt)
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_KEY=${GOOGLE_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - OPENROUTER_KEY=${OPENROUTER_KEY}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+    volumes:
+      - ./config/sigmacode-ai.yaml:/app/sigmacode-ai.yaml:ro
+    ports:
+      - "3081:3080"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      meilisearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3080/health',res=>{process.exit(res.statusCode===200?0:1)})"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - backend
+
+  client:
+    container_name: sigmacode-ai-client
+    build:
+      context: ./sigmacode_ai/client
+      dockerfile: Dockerfile
+    image: sigmacode-ai/client:latest
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - VITE_API_TARGET=http://api:3080
+    ports:
+      - "3092:3092"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - backend
+
+  mongodb:
+    image: mongo:6.0
+    container_name: sigmacode-mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "'db.runCommand({ ping: 1 }).ok'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=
+      - MONGO_INITDB_ROOT_PASSWORD=
+    networks:
+      - backend
+
+  redis:
+    container_name: sigmacode-redis
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+
+  meilisearch:
+    container_name: sigmacode-meilisearch
+    image: getmeili/meilisearch:v1.12.3
+    restart: unless-stopped
+    environment:
+      - MEILI_NO_ANALYTICS=true
+      - MEILI_ENV=production
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+      - TZ=${TZ}
+    volumes:
+      - meilisearch_data:/meili_data
+    healthcheck:
+      test: ["CMD", "sh", "-lc", "curl -sf http://localhost:7700/health || wget -qO- http://localhost:7700/health"] # returns {"status":"available"}
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  redis_data:
+  meilisearch_data:

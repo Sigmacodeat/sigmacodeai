@@ -1,0 +1,106 @@
+# Sigmacode AI custom config (branding of librechat.yaml; no secrets here)
+version: 1.2.8
+cache: true
+
+interface:
+  customWelcome: 'Willkommen bei Sigmacode AI.'
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+
+registration:
+  socialLogins: ['github', 'google']
+
+actions:
+  allowedDomains:
+    - 'sigmacode.ai'
+    - 'google.com'
+
+endpoints:
+  custom:
+    # OpenAI
+    - name: 'openai-proxy'
+      apiKey: '${OPENAI_API_KEY}'
+      baseURL: 'http://ai-proxy:8787/openai'
+      models:
+        default: ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1-mini']
+        fetch: true
+      titleConvo: true
+      titleModel: 'gpt-4o-mini'
+      modelDisplayLabel: 'OpenAI'
+
+    # Anthropic
+    - name: 'anthropic-proxy'
+      apiKey: '${ANTHROPIC_API_KEY}'
+      baseURL: 'http://ai-proxy:8787/anthropic'
+      models:
+        default: ['claude-3-5-sonnet-20240620', 'claude-3-5-haiku-20241022']
+        fetch: true
+      titleConvo: true
+      titleModel: 'claude-3-5-haiku-20241022'
+      modelDisplayLabel: 'Anthropic'
+
+    # Google Gemini
+    - name: 'google-proxy'
+      apiKey: '${GOOGLE_KEY}'
+      baseURL: 'http://ai-proxy:8787/google'
+      models:
+        default: ['gemini-1.5-pro', 'gemini-1.5-flash']
+        fetch: true
+      titleConvo: true
+      titleModel: 'gemini-1.5-flash'
+      modelDisplayLabel: 'Google'
+
+    # Groq (low latency)
+    - name: 'groq-proxy'
+      apiKey: '${GROQ_API_KEY}'
+      baseURL: 'http://ai-proxy:8787/groq'
+      models:
+        default: ['llama-3.1-70b-versatile', 'llama-3.1-8b-instant']
+        fetch: false
+      titleConvo: true
+      titleModel: 'llama-3.1-8b-instant'
+      modelDisplayLabel: 'Groq'
+
+    # Mistral (EU-friendly)
+    - name: 'mistral-proxy'
+      apiKey: '${MISTRAL_API_KEY}'
+      baseURL: 'http://ai-proxy:8787/mistral'
+      models:
+        default: ['mistral-small', 'mistral-large-latest']
+        fetch: true
+      titleConvo: true
+      titleModel: 'mistral-small'
+      modelDisplayLabel: 'Mistral'
+      dropParams: ['stop', 'user', 'frequency_penalty', 'presence_penalty']
+
+    # OpenRouter (many models)
+    - name: 'openrouter-proxy'
+      apiKey: '${OPENROUTER_KEY}'
+      baseURL: 'http://ai-proxy:8787/openrouter'
+      headers:
+        x-librechat-body-parentmessageid: '{{LIBRECHAT_BODY_PARENTMESSAGEID}}'
+      models:
+        default: ['meta-llama/llama-3-70b-instruct']
+        fetch: true
+      titleConvo: true
+      titleModel: 'meta-llama/llama-3-70b-instruct'
+      dropParams: ['stop']
+      modelDisplayLabel: 'OpenRouter'
+
+    # Perplexity (web-augmented)
+    - name: 'perplexity-proxy'
+      apiKey: '${PERPLEXITY_API_KEY}'
+      baseURL: 'http://ai-proxy:8787/perplexity'
+      models:
+        default: ['sonar', 'sonar-pro']
+        fetch: false
+      titleConvo: true
+      titleModel: 'sonar'
+      modelDisplayLabel: 'Perplexity'

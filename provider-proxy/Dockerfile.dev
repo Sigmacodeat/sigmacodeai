@@ -1,0 +1,19 @@
+# Dev image for provider-proxy with hot reload
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install all deps including dev deps
+COPY package.json ./
+RUN npm install --production=false
+
+# Copy minimal files; source will be bind-mounted in compose override
+COPY tsconfig.json ./
+COPY src ./src
+
+ENV NODE_ENV=development
+ENV PORT=8787
+EXPOSE 8787
+
+# Default dev command; can be overridden by compose
+CMD ["npm", "run", "dev"]

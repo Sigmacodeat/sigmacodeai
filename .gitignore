@@ -1,0 +1,77 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+/dist
+/build
+.next/
+out/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.DS_Store
+*.pem
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Docker
+.docker
+.dockerignore
+
+# Local data
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs
+*.log
+
+# Koyeb
+.koyeb/
+.koyeb.yaml
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Secrets & env
+.env
+*.env*
+sigmacode_ai/.env*
+
+# Logs
+logs/
+sigmacode_ai/logs/
+*.log
+
+# Builds & dist
+**/dist/
+**/build/
+coverage/
+
+# Local data
+sigmacode_ai/data-node/
+sigmacode_ai/meili_data*/
+pgdata*/
+*.db

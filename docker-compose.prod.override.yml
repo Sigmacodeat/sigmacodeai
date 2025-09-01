@@ -1,0 +1,20 @@
+services:
+  api:
+    # Verwende das aus der CI gepushte Image (in .env: GHCR_IMAGE=ghcr.io/<owner>/sigmacode-ai-api:latest)
+    image: ${GHCR_IMAGE}
+    # build aus Base-Datei für Prod deaktivieren
+    build: null
+    environment:
+      - NODE_ENV=production
+    # Production-Start (explizit, deckungsgleich mit Dockerfile-CMD)
+    entrypoint: ["/bin/sh", "-lc"]
+    command: ["npm run backend"]
+    # Best practice: Container sollte Production-Build aus Dockerfile nutzen
+    # Falls der Dockerfile nicht baut, fallback auf CMD:
+    # command: ["sh", "-lc", "npm ci --omit=dev && npm run build && npm run start"]
+
+  mongodb:
+    # In Prod meist kein Port-Expose nötig; hier bewusst weggelassen
+
+  meilisearch:
+    # Prod: Port-Expose optional (z.B. nur intern über API)

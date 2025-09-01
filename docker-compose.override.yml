@@ -1,0 +1,18 @@
+services:
+  api:
+    environment:
+      - ALLOW_REGISTRATION=true
+      - APP_NAME=Sigmacode AI
+      - APP_TITLE=Sigmacode AI
+      - APP_DESCRIPTION=Modern AI Platform
+      - NODE_ENV=development
+    entrypoint: ["/bin/sh", "-lc"]
+    command: ["npm run backend:dev"]
+    
+  mongodb:
+    ports:
+      - "27018:27017"
+    
+  meilisearch:
+    ports:
+      - "7701:7700"

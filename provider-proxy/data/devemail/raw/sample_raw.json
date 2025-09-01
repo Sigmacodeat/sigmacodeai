@@ -1,0 +1,10 @@
+{
+  "id": "raw-2025-08-27-0001",
+  "source": "imap:stub",
+  "receivedAt": "2025-08-27T00:00:00.000Z",
+  "subject": "DMARC Aggregate Report (stub)",
+  "attachments": [
+    { "filename": "report.xml", "mime": "application/xml", "size": 1024 }
+  ],
+  "note": "Dies ist ein Stub-Eintrag bis der IMAP-Fetcher implementiert ist."
+}
