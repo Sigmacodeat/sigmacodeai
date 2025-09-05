@@ -1,9 +1,6 @@
 services:
   api:
-    # Verwende das aus der CI gepushte Image (in .env: GHCR_IMAGE=ghcr.io/<owner>/sigmacode-ai-api:latest)
-    image: ${GHCR_IMAGE}
-    # build aus Base-Datei für Prod deaktivieren
-    build: null
+    # Nutze lokalen Build aus der Basis-Compose, falls GHCR_IMAGE nicht korrekt gesetzt ist
     environment:
       - NODE_ENV=production
     # Production-Start (explizit, deckungsgleich mit Dockerfile-CMD)
@@ -12,6 +9,22 @@ services:
     # Best practice: Container sollte Production-Build aus Dockerfile nutzen
     # Falls der Dockerfile nicht baut, fallback auf CMD:
     # command: ["sh", "-lc", "npm ci --omit=dev && npm run build && npm run start"]
+
+  client:
+    # Build client using multi-stage Dockerfile 'prod' target (nginx)
+    build:
+      context: ./sigmacode_ai/client
+      dockerfile: Dockerfile
+      target: prod
+    image: sigmacode-ai/client:prod
+    environment:
+      # In production, prefer relative API path via reverse proxy
+      - VITE_API_TARGET=${VITE_API_TARGET:-/api}
+    ports:
+      - "3093:80"
+    depends_on:
+      api:
+        condition: service_started
 
   mongodb:
     # In Prod meist kein Port-Expose nötig; hier bewusst weggelassen

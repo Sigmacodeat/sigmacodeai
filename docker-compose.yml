@@ -83,8 +83,20 @@ services:
       - ./.env
     environment:
       - VITE_API_TARGET=http://api:3080
+      # Force reliable file watching inside Docker on macOS/Windows
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - VITE_FORCE_POLLING=true
+      - TAILWIND_MODE=watch
+      - NODE_ENV=development
     ports:
       - "3092:3092"
+    # Run Vite dev server explicitly; clear Vite caches to avoid stale reload issues
+    command: ["sh", "-lc", "rm -rf node_modules/.vite .vite && npm run dev -- --host 0.0.0.0 --port 3092"]
+    # Mount source for instant reload; keep container node_modules
+    volumes:
+      - ./sigmacode_ai/client:/app
+      - /app/node_modules
     depends_on:
       api:
         condition: service_healthy
