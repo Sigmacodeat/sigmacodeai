@@ -1,0 +1,46 @@
+node_modules
+ 
+ # OS
+ .DS_Store
+ 
+ # Env
+ .env
+ .env.local
+ .env.*.local
+ 
+ # Logs
+ *.log
+ logs/
+ 
+ # Next.js
+ .next/
+ .vercel/
+ out/
+ 
+ # Vercel
+ .vercel
+ 
+ # Build outputs
+ dist/
+ build/
+ 
+ # Databases / search data
+ LibreChat_fresh/
+ librechat/logs/
+ librechat/images/
+ meili_data_v1.12/
+ LibreChat_fresh/meili_data_v1.12/
+ 
+ # Provider proxy local db
+ provider-proxy/devemail.db
+ 
+ # Cache
+ .cache/
+ pnpm-debug.log*
+ npm-debug.log*
+ yarn-error.log*
+ 
+ # Misc
+ coverage/
+ tmp/
+ temp/

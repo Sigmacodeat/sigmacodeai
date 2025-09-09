@@ -2,12 +2,12 @@ name: CI (Next.js - sigmacode_ai)
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master, main, clean-master ]
     paths:
       - 'sigmacode_ai/**'
       - '.github/workflows/ci.yml'
   pull_request:
-    branches: [ master, main ]
+    branches: [ master, main, clean-master ]
     paths:
       - 'sigmacode_ai/**'
       - '.github/workflows/ci.yml'
