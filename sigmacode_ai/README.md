@@ -24,14 +24,14 @@
     <img
       src="https://img.shields.io/badge/SPONSORS-brightgreen.svg?style=for-the-badge&logo=github-sponsors&logoColor=white&labelColor=000000&logoWidth=20">
   </a>
-  <a href="https://github.com/ww3avengers/sigmacodeai/actions/workflows/ci.yml">
-    <img src="https://github.com/ww3avengers/sigmacodeai/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <a href="https://github.com/Sigmacodeat/betcockpit/actions/workflows/ci.yml">
+    <img src="https://github.com/Sigmacodeat/betcockpit/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
-  <a href="https://github.com/ww3avengers/sigmacodeai/actions/workflows/vercel-deploy.yml">
-    <img src="https://github.com/ww3avengers/sigmacodeai/actions/workflows/vercel-deploy.yml/badge.svg" alt="Vercel Deploy" />
+  <a href="https://github.com/Sigmacodeat/betcockpit/actions">
+    <img src="https://img.shields.io/badge/Actions-Workflows-blue?style=flat-square" alt="Actions" />
   </a>
-  <a href="https://github.com/ww3avengers/sigmacodeai/actions/workflows/docker-publish.yml">
-    <img src="https://github.com/ww3avengers/sigmacodeai/actions/workflows/docker-publish.yml/badge.svg" alt="Docker Publish" />
+  <a href="https://github.com/Sigmacodeat/betcockpit/actions">
+    <img src="https://img.shields.io/badge/Docker-Publish-grey?style=flat-square" alt="Docker Publish" />
   </a>
 </p>
 
