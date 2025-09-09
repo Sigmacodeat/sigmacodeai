@@ -1,0 +1,10 @@
+# BFG replacement rules to redact secrets in history
+# Format: each line is an expression; using regex: prefix and ==> replacement
+regex:(OPENAI_API_KEY\s*=)\s*.*==>\1 REDACTED
+regex:(ANTHROPIC_API_KEY\s*=)\s*.*==>\1 REDACTED
+regex:(GROQ_API_KEY\s*=)\s*.*==>\1 REDACTED
+regex:(PERPLEXITY_API_KEY\s*=)\s*.*==>\1 REDACTED
+regex:(GOOGLE_CLIENT_ID\s*=)\s*.*==>\1 REDACTED
+regex:(GOOGLE_CLIENT_SECRET\s*=)\s*.*==>\1 REDACTED
+regex:(OPENROUTER_KEY\s*=)\s*.*==>\1 REDACTED
+regex:(MISTRAL_API_KEY\s*=)\s*.*==>\1 REDACTED
