@@ -1,0 +1,169 @@
+{
+  "providers": [
+    {
+      "slug": "openai",
+      "name": "OpenAI",
+      "website": "https://openai.com",
+      "docsUrl": "https://platform.openai.com/docs",
+      "subtitle": "Generalist models, strong tools & reasoning",
+      "description": "OpenAI provides a family of GPT models suitable for chat, coding, and tool-augmented agents.",
+      "models": [
+        { "name": "o4-mini", "contextWindow": 200000, "supportsTools": true, "strengths": ["reasoning", "tools"] },
+        { "name": "gpt-4o-mini", "contextWindow": 200000, "supportsTools": true, "strengths": ["speed", "cost"] }
+      ],
+      "tasks": [
+        { "type": "chat", "recommendedModels": ["o4-mini", "gpt-4o-mini"], "notes": "Balanced quality/cost" },
+        { "type": "agent", "recommendedModels": ["o4-mini"], "notes": "Tool-use & planning" },
+        { "type": "coding", "recommendedModels": ["o4-mini"], "notes": "Good for code & review" }
+      ],
+      "agentPatterns": [
+        { "name": "ReAct", "bestWith": ["o4-mini"], "pitfalls": ["over-calling tools"] },
+        { "name": "Planner-Executor", "bestWith": ["o4-mini"] }
+      ],
+      "faq": [
+        { "q": "Which model for tool-use?", "a": "o4-mini is a solid default for tool-enabled agents." }
+      ]
+    },
+    {
+      "slug": "anthropic",
+      "name": "Anthropic",
+      "website": "https://anthropic.com",
+      "docsUrl": "https://docs.anthropic.com",
+      "subtitle": "Claude family, strong long-context & safety",
+      "description": "Anthropic Claude models excel at long-context comprehension and safe outputs.",
+      "models": [
+        { "name": "claude-3.7-sonnet", "contextWindow": 200000, "supportsTools": true, "strengths": ["long context", "safety"] },
+        { "name": "claude-3.7-haiku", "contextWindow": 200000, "supportsTools": true, "strengths": ["speed", "cost"] }
+      ],
+      "tasks": [
+        { "type": "rag", "recommendedModels": ["claude-3.7-sonnet"], "notes": "Robust with long docs" },
+        { "type": "chat", "recommendedModels": ["claude-3.7-haiku", "claude-3.7-sonnet"] }
+      ],
+      "agentPatterns": [
+        { "name": "ReAct", "bestWith": ["claude-3.7-sonnet"] }
+      ]
+    },
+    {
+      "slug": "mistral",
+      "name": "Mistral",
+      "website": "https://mistral.ai",
+      "docsUrl": "https://docs.mistral.ai",
+      "subtitle": "Mistral Large/Small · efficient · EU options",
+      "description": "Lightweight, fast and cost‑effective models with strong European hosting options.",
+      "models": [
+        { "name": "mistral-large", "supportsTools": true, "strengths": ["efficiency", "cost"] },
+        { "name": "mistral-small", "supportsTools": false, "strengths": ["latency", "cost"] }
+      ],
+      "tasks": [
+        { "type": "chat", "recommendedModels": ["mistral-large"] },
+        { "type": "coding", "recommendedModels": ["mistral-large"] }
+      ],
+      "agentPatterns": [
+        { "name": "Planner-Executor", "bestWith": ["mistral-large"] }
+      ]
+    },
+    {
+      "slug": "groq",
+      "name": "Groq",
+      "website": "https://groq.com",
+      "docsUrl": "https://wow.groq.com",
+      "subtitle": "Llama/Gemma on LPU · extremely low latency",
+      "description": "Ultra‑low latency inference for interactive and streaming experiences.",
+      "models": [
+        { "name": "llama-3.1-70b", "supportsTools": true, "strengths": ["latency", "throughput"] }
+      ],
+      "tasks": [
+        { "type": "realtime", "recommendedModels": ["llama-3.1-70b"], "notes": "Excellent for streaming UIs" }
+      ],
+      "agentPatterns": [
+        { "name": "ReAct", "bestWith": ["llama-3.1-70b"] }
+      ]
+    },
+    {
+      "slug": "deepseek",
+      "name": "DeepSeek",
+      "website": "https://deepseek.com",
+      "docsUrl": "https://api-docs.deepseek.com",
+      "subtitle": "R1/Chat · cost‑efficient · reasoning & code",
+      "description": "Strong price/performance models focused on reasoning and coding tasks.",
+      "models": [
+        { "name": "deepseek-r1", "supportsTools": true, "strengths": ["reasoning", "cost"] }
+      ],
+      "tasks": [
+        { "type": "chat", "recommendedModels": ["deepseek-r1"] },
+        { "type": "coding", "recommendedModels": ["deepseek-r1"] }
+      ],
+      "agentPatterns": [
+        { "name": "ReAct", "bestWith": ["deepseek-r1"] }
+      ]
+    },
+    {
+      "slug": "google-vertex-gemini",
+      "name": "Google Vertex/Gemini",
+      "website": "https://cloud.google.com/vertex-ai",
+      "docsUrl": "https://cloud.google.com/vertex-ai/docs",
+      "subtitle": "Gemini 1.5 · multimodal · Vertex AI governance",
+      "description": "Enterprise‑grade AI on Google Cloud with governance, monitoring and policies.",
+      "models": [
+        { "name": "gemini-1.5-pro", "supportsTools": true, "strengths": ["multimodal", "governance"] }
+      ],
+      "tasks": [
+        { "type": "multimodal", "recommendedModels": ["gemini-1.5-pro"] }
+      ],
+      "agentPatterns": [
+        { "name": "Planner-Executor", "bestWith": ["gemini-1.5-pro"] }
+      ]
+    },
+    {
+      "slug": "azure-openai",
+      "name": "Azure OpenAI",
+      "website": "https://azure.microsoft.com/en-us/products/ai-services/openai-service",
+      "docsUrl": "https://learn.microsoft.com/en-us/azure/ai-services/openai/",
+      "subtitle": "Enterprise security · Private Link · regional control",
+      "description": "Microsoft ecosystem integration with strong compliance and network isolation.",
+      "models": [
+        { "name": "gpt-4o", "supportsTools": true, "strengths": ["compliance", "security"] }
+      ],
+      "tasks": [
+        { "type": "chat", "recommendedModels": ["gpt-4o"] }
+      ],
+      "agentPatterns": [
+        { "name": "Planner-Executor", "bestWith": ["gpt-4o"] }
+      ]
+    },
+    {
+      "slug": "aws-bedrock",
+      "name": "AWS Bedrock",
+      "website": "https://aws.amazon.com/bedrock/",
+      "docsUrl": "https://docs.aws.amazon.com/bedrock/",
+      "subtitle": "Anthropic / Meta / Mistral via Bedrock · IAM & regions",
+      "description": "Centralized access to multiple model providers with AWS IAM and observability.",
+      "models": [
+        { "name": "claude-3.7", "supportsTools": true, "strengths": ["governance", "integration"] }
+      ],
+      "tasks": [
+        { "type": "chat", "recommendedModels": ["claude-3.7"] }
+      ],
+      "agentPatterns": [
+        { "name": "ReAct", "bestWith": ["claude-3.7"] }
+      ]
+    },
+    {
+      "slug": "openrouter",
+      "name": "OpenRouter",
+      "website": "https://openrouter.ai",
+      "docsUrl": "https://openrouter.ai/docs",
+      "subtitle": "Routing across many models · price/quality mix",
+      "description": "Flexible access to a broad selection of models with routing and pricing controls.",
+      "models": [
+        { "name": "meta-llama-3.1-70b", "supportsTools": true, "strengths": ["choice", "price"] }
+      ],
+      "tasks": [
+        { "type": "chat", "recommendedModels": ["meta-llama-3.1-70b"] }
+      ],
+      "agentPatterns": [
+        { "name": "Planner-Executor", "bestWith": ["meta-llama-3.1-70b"] }
+      ]
+    }
+  ]
+}

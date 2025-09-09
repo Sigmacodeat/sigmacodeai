@@ -1,0 +1,21 @@
+# Development stage
+FROM node:18-alpine AS development
+
+WORKDIR /app
+
+# Install dependencies first to leverage Docker cache
+COPY package*.json ./
+RUN npm ci
+
+# Copy only necessary files for development
+COPY public/ ./public
+COPY src/ ./src
+COPY next.config.js ./
+COPY tsconfig.json ./
+COPY .env* ./
+
+# Expose port
+EXPOSE 3081
+
+# Start development server with debug logging
+CMD ["npm", "run", "dev"]

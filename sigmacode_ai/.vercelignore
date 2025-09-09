@@ -1,0 +1,24 @@
+# Exclude backend and non-frontend workspaces from Vercel upload
+api/
+provider-proxy/
+librechat/
+prisma/
+e2e/
+scripts/
+docs/
+pitchdeck/
+pitchdeck-export/
+.github/
+.husky/
+**/*.test.*
+**/__tests__/**
+
+# Node/yarn/pnpm caches
+node_modules/
+.pnpm-store/
+
+# Local build outputs (we only want client/dist as produced during build)
+client/node_modules/
+client/.next/
+client/out/
+client/.cache/

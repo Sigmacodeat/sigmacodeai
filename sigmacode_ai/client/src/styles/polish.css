@@ -1,0 +1,138 @@
+/* Full Pro-Polish Kit – modular, theming-fähig, reduced-motion aware */
+
+:root {
+  --brand: 255 90% 60%; /* HSL for Tailwind-like hsl(var(--brand)) */
+  --brand-2: 260 90% 64%;
+  --bg-elevated: 0 0% 100%;
+  --border-muted: 220 14% 90%;
+}
+
+[data-theme="dark"] {
+  --brand: 255 90% 70%;
+  --brand-2: 260 90% 72%;
+  --bg-elevated: 222 47% 11%;
+  --border-muted: 222 40% 18%;
+}
+
+/* Subtiles Grain-Overlay */
+.polish-grain {
+  position: relative;
+}
+.polish-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .035; /* sehr fein */
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion: reduce) {
+  .polish-grain::after { opacity: .02; }
+}
+
+/* Gradient-Card mit feiner Border + inner highlight */
+.polish-card {
+  position: relative;
+  border-radius: 10px;
+  background: linear-gradient(180deg, hsl(var(--bg-elevated) / .7), hsl(var(--bg-elevated) / .6));
+}
+.polish-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 12px;
+  background: conic-gradient(from 180deg at 50% 50%,
+    hsla(var(--brand), .45), hsla(var(--brand-2), .45), hsla(var(--brand), .45));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  opacity: .35;
+  pointer-events: none;
+}
+.polish-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 hsla(0,0%,100%,.6);
+  pointer-events: none;
+}
+
+/* Tabs */
+.polish-tab {
+  position: relative;
+  will-change: transform, opacity;
+}
+.polish-tab--active {
+  box-shadow: 0 10px 20px -12px rgba(79,70,229,.35);
+}
+.polish-tab--active::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 10px;
+  background: conic-gradient(from 0deg at 50% 50%, hsla(var(--brand), .6), hsla(var(--brand-2), .6), hsla(var(--brand), .6));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  opacity: .55;
+}
+
+/* Badges */
+.polish-badge {
+  position: relative;
+  border-radius: 9999px;
+}
+.polish-badge::before {
+  content: "";
+  position: absolute; inset: -1px; border-radius: 9999px;
+  background: linear-gradient(90deg, hsla(var(--brand), .5), hsla(var(--brand-2), .5));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  padding: 1px; opacity: .5; pointer-events: none;
+}
+.polish-badge::after { content: ""; position: absolute; inset: 0; border-radius: 9999px; box-shadow: inset 0 1px 0 hsla(0,0%,100%,.6); pointer-events: none; }
+
+/* CTA Buttons */
+.polish-cta {
+  position: relative;
+  background-image: linear-gradient(180deg, hsl(var(--brand)), hsl(var(--brand-2)));
+}
+.polish-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,.0) 30%, rgba(255,255,255,.35) 50%, rgba(255,255,255,.0) 70%, transparent 100%);
+  transform: translateX(-120%);
+  transition: transform .6s ease;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.polish-cta:hover::after { transform: translateX(120%); }
+
+.polish-cta--secondary {
+  position: relative;
+}
+.polish-cta--secondary::before {
+  content: ""; position: absolute; inset: -1px; border-radius: 8px;
+  background: linear-gradient(90deg, hsla(var(--brand), .55), hsla(var(--brand-2), .55));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; padding: 1px; opacity: .65; pointer-events: none;
+}
+
+/* Radar sweep/glow helpers */
+.polish-radar {
+  filter: drop-shadow(0 4px 14px rgba(79,70,229,.25));
+}
+
+/* Reduced motion – Effekte drosseln */
+@media (prefers-reduced-motion: reduce) {
+  .polish-cta::after { display: none; }
+}

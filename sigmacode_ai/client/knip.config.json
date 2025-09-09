@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignore": [
+    "src/components/pitchdeck/InteractivePitchdeck.tsx"
+  ],
+  "ignores": {
+    "dependencies": [],
+    "devDependencies": []
+  },
+  "entry": [
+    "src/main.tsx",
+    "src/**/*.tsx",
+    "src/**/*.ts"
+  ]
+}

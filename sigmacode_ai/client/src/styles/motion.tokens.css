@@ -1,0 +1,36 @@
+:root {
+  --motion-dur-xxs: 120ms;
+  --motion-dur-xs: 180ms;
+  --motion-dur-sm: 240ms;
+  --motion-dur-md: 360ms;
+  --motion-dur-lg: 600ms;
+  --motion-dur-xxl: 900ms;
+
+  --motion-ease-standard: cubic-bezier(.22,.08,.14,.99);
+  --motion-ease-in: cubic-bezier(.4,0,1,1);
+  --motion-ease-out: cubic-bezier(0,0,.2,1);
+  /* smoother than ease-out, for gentle section entries */
+  --motion-ease-smooth: cubic-bezier(.22,.61,.36,1);
+  /* emphasized/overshoot for spring-like effects */
+  --motion-ease-emph: cubic-bezier(.2,.8,.2,1);
+
+  --motion-rise-y: 16px;
+  --motion-fade: 0.12;
+  --motion-scale-sm: 0.98;
+  --motion-scale-lg: 1.02;
+
+  /* optional elevation shadows for pop effects */
+  --elev-shadow-initial: 0 2px 10px rgba(0,0,0,0.06);
+  --elev-shadow-final: 0 8px 26px rgba(0,0,0,0.12);
+}
+
+/* Reduced motion: disable decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-dur-xxs: 0ms;
+    --motion-dur-xs: 0ms;
+    --motion-dur-sm: 0ms;
+    --motion-dur-md: 0ms;
+    --motion-dur-lg: 0ms;
+  }
+}

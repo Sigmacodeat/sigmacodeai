@@ -1,0 +1,23 @@
+# Exclude development artifacts from Vercel build context
+node_modules
+.DS_Store
+.vscode
+.idea
+*.log
+coverage
+junit.xml
+# Git
+.git
+.gitignore
+# Local env and hosting
+.env
+.env.*
+.vercel
+.netlify
+pnpm-lock.yaml
+# Build outputs
+./dist
+# Tests and mocks
+__tests__
+**/*.test.*
+**/*.spec.*

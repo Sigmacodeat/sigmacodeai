@@ -1,0 +1,66 @@
+# Exclude heavy/unnecessary files from the deployment archive
+# Keep this minimal so Docker can build using the Dockerfile (npm install runs inside the container)
+
+# VCS
+.git/
+.gitignore
+
+# Node modules & caches
+node_modules/
+api/node_modules/
+client/node_modules/
+packages/*/node_modules/
+.pnpm-store/
+.pnp.cjs
+.pnp.loader.mjs
+.pnp.data.json
+
+# Package managers
+pnpm-lock.yaml
+# keep root package-lock.json (needed by Dockerfile)
+client/package-lock.json
+api/package-lock.json
+packages/**/package-lock.json
+bun.lockb
+.yarn/
+.yarnrc*
+
+# Build artifacts
+**/dist/
+**/build/
+**/.next/
+**/.cache/
+**/coverage/
+client/.vite/
+client/.turbo/
+client/.output/
+
+# Local/dev assets
+**/*.log
+**/.DS_Store
+e2e/
+docs/
+**/tests/
+**/__tests__/
+**/__mocks__/
+
+# Docker/local compose we don't need to upload
+deploy-compose.yml
+docker-compose*.yml
+.devcontainer/
+
+# App-specific large folders that are not needed for build context
+client/
+client/public/uploads/
+client/public/images/
+librechat.yaml/
+logs/
+api/logs/
+images/
+provider-proxy/
+api/data/
+data/
+data-node/
+meili_data_v1.12/
+helm/
+redis-config/

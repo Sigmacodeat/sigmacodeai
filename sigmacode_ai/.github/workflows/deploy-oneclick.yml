@@ -1,0 +1,128 @@
+name: One-Click Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Optionaler Image Tag (default = short SHA)"
+        required: false
+        type: string
+      build_from_source:
+        description: "API-Image aus Source bauen (Dockerfile.multi: api-build)"
+        required: false
+        type: boolean
+        default: false
+      server_ghcr_login:
+        description: "Auf Server bei GHCR einloggen (für private Packages)"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  GHCR_OWNER: ${{ secrets.GHCR_OWNER }}
+  IMAGE_TAG: ${{ inputs.image_tag || github.sha }}
+
+jobs:
+  build_and_push:
+    name: Build/Tag/Push Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute TAG
+        id: tag
+        run: |
+          SHORT_SHA=${IMAGE_TAG:0:12}
+          if [ -n "${{ inputs.image_tag }}" ]; then TAG=${{ inputs.image_tag }}; else TAG=$SHORT_SHA; fi
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Pull upstream images
+        run: |
+          docker pull ghcr.io/danny-avila/librechat-dev-api:latest
+          docker pull ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
+
+      - name: Set up Buildx
+        if: inputs.build_from_source == true
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push API image from source
+        if: inputs.build_from_source == true
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile.multi
+          target: api-build
+          push: true
+          tags: ghcr.io/${{ env.GHCR_OWNER }}/librechat-dev-api:${{ steps.tag.outputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Retag API image (no build)
+        if: inputs.build_from_source != true
+        run: |
+          echo "Using tag: ${TAG}"
+          docker tag ghcr.io/danny-avila/librechat-dev-api:latest ghcr.io/${GHCR_OWNER}/librechat-dev-api:${TAG}
+          docker push ghcr.io/${GHCR_OWNER}/librechat-dev-api:${TAG}
+
+      - name: Retag and push RAG image
+        run: |
+          docker tag ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest ghcr.io/${GHCR_OWNER}/librechat-rag-api-dev-lite:${TAG}
+          docker push ghcr.io/${GHCR_OWNER}/librechat-rag-api-dev-lite:${TAG}
+
+  deploy:
+    name: SSH Deploy
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject tag to env
+        run: |
+          # Fallback falls vorheriger Schritt $TAG nicht exportiert hätte
+          TAG=${{ env.IMAGE_TAG }}
+          echo "DEPLOY_TAG=${TAG:0:12}" >> $GITHUB_ENV
+
+      - name: SSH into server and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            # Compose benötigt diese Variablen
+            export GHCR_OWNER=${{ secrets.GHCR_OWNER }}
+            export IMAGE_TAG=${DEPLOY_TAG}
+            export RAG_PORT=${RAG_PORT:-8000}
+
+            # Optionaler Login bei GHCR für private Images
+            if [ "${{ inputs.server_ghcr_login }}" = "true" ] && [ -n "${{ secrets.GHCR_PULL_TOKEN }}" ]; then
+              echo "Logging in to GHCR on server..."
+              echo "${{ secrets.GHCR_PULL_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_PULL_USERNAME || github.actor }}" --password-stdin || true
+            fi
+
+            echo "Pulling images ghcr.io/${GHCR_OWNER}/:*:${IMAGE_TAG}"
+            # einfache Retry-Logik bei Netzwerkaussetzern
+            (docker compose -f deploy-compose.yml pull) || (sleep 3 && docker compose -f deploy-compose.yml pull)
+            (docker compose -f deploy-compose.yml up -d --remove-orphans) || (sleep 3 && docker compose -f deploy-compose.yml up -d --remove-orphans)
+
+            docker image prune -f || true

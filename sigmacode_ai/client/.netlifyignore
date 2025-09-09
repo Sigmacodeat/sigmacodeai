@@ -1,0 +1,31 @@
+# Exclude large/unnecessary files from Netlify upload
+node_modules/
+**/node_modules/**
+
+# VCS & IDE
+.git/
+**/.git/**
+.github/
+.vscode/
+.DS_Store
+
+# Tests & coverage
+**/__tests__/**
+**/tests/**
+coverage/
+
+# Logs & maps
+*.log
+**/*.log
+*.map
+**/*.map
+vite-output.log
+
+# Tooling caches
+.pnpm-store/
+.npm/
+.cache/
+
+e2e/
+storybook/
+docs/
