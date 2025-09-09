@@ -75,3 +75,9 @@ sigmacode_ai/data-node/
 sigmacode_ai/meili_data*/
 pgdata*/
 *.db
+
+# LibreChat local databases (Mongo/WiredTiger) – do not version
+LibreChat_fresh/data-node/
+LibreChat_fresh/meili_data_v1.12/
+LibreChat_fresh/**/WiredTiger*
+LibreChat_fresh/**/journal/
