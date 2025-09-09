@@ -2,7 +2,7 @@ name: Build and Publish API Image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - "sigmacode_ai/**"
       - "docker-compose.yml"

@@ -1,0 +1,32 @@
+name: Deploy API & Worker to Render
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'sigmacode_ai/api/**'
+      - 'sigmacode_ai/packages/**'
+      - '.github/workflows/render-deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-web-and-worker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Web Service (API) if SERVICE_ID provided
+        if: ${{ secrets.RENDER_API_KEY != '' && secrets.RENDER_WEB_SERVICE_ID != '' }}
+        run: |
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            https://api.render.com/v1/services/${{ secrets.RENDER_WEB_SERVICE_ID }}/deploys \
+            -d '{"clearCache":false}'
+
+      - name: Deploy Worker Service if SERVICE_ID provided
+        if: ${{ secrets.RENDER_API_KEY != '' && secrets.RENDER_WORKER_SERVICE_ID != '' }}
+        run: |
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            https://api.render.com/v1/services/${{ secrets.RENDER_WORKER_SERVICE_ID }}/deploys \
+            -d '{"clearCache":false}'
