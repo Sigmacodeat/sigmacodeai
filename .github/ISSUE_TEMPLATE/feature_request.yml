@@ -1,0 +1,32 @@
+name: Feature Request
+description: Schlage eine neue Funktion oder Verbesserung vor.
+labels: [enhancement]
+title: "feat: <kurze beschreibung>"
+assignees: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Welches Problem soll die Funktion lösen?
+      placeholder: Beschreibe das Problem aus Nutzersicht.
+    validations:
+      required: true
+  - type: textarea
+    id: loesung
+    attributes:
+      label: Vorschlag
+      description: Beschreibe die gewünschte Lösung.
+      placeholder: Was soll passieren? (Akzeptanzkriterien)
+    validations:
+      required: true
+  - type: textarea
+    id: alternativen
+    attributes:
+      label: Alternativen
+      description: Gibt es alternative Lösungen oder Workarounds?
+  - type: textarea
+    id: kontext
+    attributes:
+      label: Kontext
+      description: Zusätzlicher Kontext, Links, Mockups.

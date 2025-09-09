@@ -1,0 +1,37 @@
+name: Bug Report
+description: Melde einen Fehler, der behoben werden soll.
+labels: [bug]
+title: "bug: <kurze beschreibung>"
+assignees: []
+body:
+  - type: textarea
+    id: beschreibung
+    attributes:
+      label: Beschreibung
+      description: Kurze Beschreibung des Fehlers.
+      placeholder: Was ist passiert? Was hast du erwartet?
+    validations:
+      required: true
+  - type: textarea
+    id: schritte
+    attributes:
+      label: Reproduktionsschritte
+      description: Schritte, um den Fehler zu reproduzieren.
+      placeholder: |
+        1. Gehe zu ...
+        2. Klicke auf ...
+        3. Fehler tritt auf
+    validations:
+      required: true
+  - type: input
+    id: umgebung
+    attributes:
+      label: Umgebung
+      description: Browser/OS/Runtime/Branch
+      placeholder: z.B. Chrome 127, macOS 14.5, Node 20, Branch master
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Screenshots
+      description: Relevante Logs oder Bilder anhängen.
+      render: shell
