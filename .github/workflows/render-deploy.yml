@@ -12,21 +12,25 @@ on:
 jobs:
   deploy-web-and-worker:
     runs-on: ubuntu-latest
+    env:
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      RENDER_WEB_SERVICE_ID: ${{ secrets.RENDER_WEB_SERVICE_ID }}
+      RENDER_WORKER_SERVICE_ID: ${{ secrets.RENDER_WORKER_SERVICE_ID }}
     steps:
       - name: Deploy Web Service (API) if SERVICE_ID provided
-        if: ${{ secrets.RENDER_API_KEY != '' && secrets.RENDER_WEB_SERVICE_ID != '' }}
+        if: ${{ env.RENDER_API_KEY != '' && env.RENDER_WEB_SERVICE_ID != '' }}
         run: |
           curl -fsSL -X POST \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
             -H "Content-Type: application/json" \
-            https://api.render.com/v1/services/${{ secrets.RENDER_WEB_SERVICE_ID }}/deploys \
+            https://api.render.com/v1/services/$RENDER_WEB_SERVICE_ID/deploys \
             -d '{"clearCache":false}'
 
       - name: Deploy Worker Service if SERVICE_ID provided
-        if: ${{ secrets.RENDER_API_KEY != '' && secrets.RENDER_WORKER_SERVICE_ID != '' }}
+        if: ${{ env.RENDER_API_KEY != '' && env.RENDER_WORKER_SERVICE_ID != '' }}
         run: |
           curl -fsSL -X POST \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
             -H "Content-Type: application/json" \
-            https://api.render.com/v1/services/${{ secrets.RENDER_WORKER_SERVICE_ID }}/deploys \
+            https://api.render.com/v1/services/$RENDER_WORKER_SERVICE_ID/deploys \
             -d '{"clearCache":false}'
